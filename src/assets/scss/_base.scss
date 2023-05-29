@@ -97,3 +97,11 @@ a {
 .align--right {
   text-align: right;
 }
+
+h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.2rem;
+  color: $color-yellow;
+}

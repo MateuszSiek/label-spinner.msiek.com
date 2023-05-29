@@ -2,6 +2,23 @@ import confetti from 'canvas-confetti';
 import Slot from '@js/Slot';
 import SoundEffects from '@js/SoundEffects';
 
+interface UrlParams {
+  list?: string[];
+  mute?: boolean;
+  title?: string;
+}
+
+function getUrlParams(): UrlParams {
+  const url = new URL(window.location.href);
+  const searchParams = new URLSearchParams(url.search);
+
+  const list = searchParams.get('list')?.split(',');
+  const mute = searchParams.get('mute') === 'true';
+  const title = searchParams.get('title') || undefined;
+
+  return {list, mute, title}
+}
+
 // Initialize slot machine
 (() => {
   const drawButton = document.getElementById('draw-button') as HTMLButtonElement | null;
@@ -16,6 +33,7 @@ import SoundEffects from '@js/SoundEffects';
   const nameListTextArea = document.getElementById('name-list') as HTMLTextAreaElement | null;
   const removeNameFromListCheckbox = document.getElementById('remove-from-list') as HTMLInputElement | null;
   const enableSoundCheckbox = document.getElementById('enable-sound') as HTMLInputElement | null;
+  const displayTitle = document.getElementById('display-title') as HTMLHeadingElement | null;
 
   // Graceful exit if necessary elements are not found
   if (!(
@@ -102,6 +120,15 @@ import SoundEffects from '@js/SoundEffects';
     onSpinEnd,
     onNameListChanged: stopWinningAnimation
   });
+
+  
+  const {list, mute, title} = getUrlParams();
+  if(list) slot.names = list;
+  if(mute) soundEffects.mute = mute;
+  if(title && displayTitle) {
+    displayTitle.innerText = title;
+    window.document.title = "Label Spinner: " + title;
+  };
 
   /** To open the setting page */
   const onSettingsOpen = () => {

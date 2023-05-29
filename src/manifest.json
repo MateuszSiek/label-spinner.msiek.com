@@ -1,7 +1,7 @@
 {
-  "name": "Random Name Picker for Lucky Draw",
-  "short_name": "Random Name Picker",
-  "description": "Simple HTML5 random name picker for picking lucky draw winner using Web Animations API",
+  "name": "Label Spinner for Lucky Draws",
+  "short_name": "Label Spinner",
+  "description": "An embeddable HTML5 application that allows users to pick a random label from a list, ideal for lucky draws and more.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f20c49",
