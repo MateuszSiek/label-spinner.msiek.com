@@ -5,18 +5,22 @@
   z-index: $z-index-lucky-draw; // make sure contents are on top of confetting
 }
 
-.title {
+#display-title {
+  font-size: $title-font-size;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.2rem;
+  color: $color-yellow;
   height: auto;
-  max-width: $title-width;
   width: 100%;
-  margin: $title-margin-top 0 $title-margin-bottom 0;
+  margin: 0 0 $title-margin-bottom 0;
   position: relative;
   z-index: $z-index-title; // make sure title on top of sunburst
 
   @each $media-query, $factor in $scale-factors {
     @media #{$media-query} {
-      max-width: $title-width * $factor;
-      margin: $title-margin-top 0 $title-margin-bottom * $factor 0;
+      margin: 0 0 $title-margin-bottom * $factor 0;
+      font-size: $title-font-size * $factor;
     }
   }
 }
@@ -29,6 +33,10 @@
   .icon-button {
     margin: 0 0 0 1.5rem;
   }
+}
+
+#app.embedded .control-group {
+  display: none;
 }
 
 .slot {

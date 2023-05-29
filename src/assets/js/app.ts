@@ -6,6 +6,7 @@ interface UrlParams {
   list?: string[];
   mute?: boolean;
   title?: string;
+  embedded?: boolean;
 }
 
 function getUrlParams(): UrlParams {
@@ -15,8 +16,9 @@ function getUrlParams(): UrlParams {
   const list = searchParams.get('list')?.split(',');
   const mute = searchParams.get('mute') === 'true';
   const title = searchParams.get('title') || undefined;
+  const embedded = searchParams.get('embedded') === 'true';
 
-  return {list, mute, title}
+  return {list, mute, title, embedded};
 }
 
 // Initialize slot machine
@@ -34,6 +36,7 @@ function getUrlParams(): UrlParams {
   const removeNameFromListCheckbox = document.getElementById('remove-from-list') as HTMLInputElement | null;
   const enableSoundCheckbox = document.getElementById('enable-sound') as HTMLInputElement | null;
   const displayTitle = document.getElementById('display-title') as HTMLHeadingElement | null;
+  const appWrapper = document.getElementById('app') as HTMLDivElement | null;
 
   // Graceful exit if necessary elements are not found
   if (!(
@@ -122,13 +125,14 @@ function getUrlParams(): UrlParams {
   });
 
   
-  const {list, mute, title} = getUrlParams();
+  const {list, mute, title, embedded} = getUrlParams();
   if(list) slot.names = list;
   if(mute) soundEffects.mute = mute;
   if(title && displayTitle) {
     displayTitle.innerText = title;
     window.document.title = "Label Spinner: " + title;
   };
+  if(embedded && appWrapper) appWrapper.classList.add('embedded');
 
   /** To open the setting page */
   const onSettingsOpen = () => {
