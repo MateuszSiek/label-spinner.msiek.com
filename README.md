@@ -10,20 +10,37 @@
 ## Live Demo
 Demo is available at [https://label-spinner.msiek.com](https://label-spinner.msiek.com)
 
+<img src="readme/label-spinner.gif"/>
+
+
 ## Features
 
-Label Spinner comes with several convenient features to make your random selection process as smooth as possible. It supports URL parameters to adjust the behaviour of the lottery spinner, making it both dynamic and customizable. 
+Label Spinner is a versatile tool with several features that make your random selection process both dynamic and customizable. 
 
-Here are the available URL parameters:
+### Embedding
 
-- `list`: This parameter allows you to input a list of comma-separated labels. For example, using `?list=John,Eva,Steve` will make John, Eva, and Steve the choices in the spinner.
+Label Spinner is embeddable, allowing you to place it on your own website or application. Once you've set up your parameters, click the "Embed" button to copy an embeddable link. This feature has been tested and confirmed to work with Notion.
 
-- `mute`: This is a boolean parameter that lets you control sound effects. If you prefer a silent experience, you can disable sound effects by adding `?mute=true` to the URL.
+### URL Parameters
 
-- `title`: With this parameter, you can set a custom title that is displayed on the site. For instance, `?title=Pick a name` will display "Pick a name" as the title.
+You can customize your experience with URL parameters, preserving the state of your unique configuration. The following URL parameters are available:
+
+- `list`: Input a list of comma-separated labels. For example, `?list=John,Eva,Steve` includes John, Eva, and Steve in the spinner.
+
+- `mute`: Control the sound effects. To disable sound effects, add `?mute=true` to the URL.
+
+- `title`: Set a custom title that is displayed on the site. For instance, `?title=Pick a name` displays "Pick a name" as the title.
+
+- `removeWinner`: Decide if the winner should be removed from the lottery. To remove the winner after each draw, add `?removeWinner=true` to the URL.
+
+Here is an example of a full URL using all parameters: `https://label-spinner.msiek.com/?list=John,Eva,Steve&mute=true&title=Pick%20a%20name&removeWinner=true`
+
+### Fullscreen Mode
+
+To immerse yourself fully in the selection process, Label Spinner supports fullscreen mode. Click the fullscreen button on the site to enable this view.
 
 
-### Technology Stack
+## Technology Stack
 * Pug
 * CSS3 (SCSS)
 * Web Animations API
