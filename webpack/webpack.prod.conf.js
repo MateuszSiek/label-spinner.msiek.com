@@ -27,6 +27,16 @@ dotenv.config({
 
 const clientEnv = getClientEnvironment('production');
 
+function copyHeadersFile() {
+  const sourcePath = path.join(__dirname,'..' ,'_headers');
+  const destinationPath = path.join(__dirname, '..','dist', '_headers');
+
+  fs.copyFile(sourcePath, destinationPath, (err) => {
+    if (err) throw err;
+    console.log('_headers file was copied to dist directory');
+  });
+}
+
 module.exports = merge(baseWebpackConfig, {
   mode: 'production',
   target: 'browserslist',
@@ -38,6 +48,7 @@ module.exports = merge(baseWebpackConfig, {
   },
   plugins: [
     new Webpack.DefinePlugin(clientEnv.stringified),
+
     new Webpack.optimize.ModuleConcatenationPlugin(),
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].[chunkhash:8].css'
@@ -49,7 +60,14 @@ module.exports = merge(baseWebpackConfig, {
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       reportFilename: '../bundle-analyzer-plugin-report.html'
-    })
+    }),
+    {
+      apply: (compiler) => {
+        compiler.hooks.done.tap('DonePlugin', () => {
+          copyHeadersFile();
+        });
+      },
+    },
   ],
   module: {
     rules: [
