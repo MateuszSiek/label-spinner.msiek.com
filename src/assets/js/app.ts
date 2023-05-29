@@ -1,25 +1,7 @@
 import confetti from 'canvas-confetti';
 import Slot from '@js/Slot';
 import SoundEffects from '@js/SoundEffects';
-
-interface UrlParams {
-  list?: string[];
-  mute?: boolean;
-  title?: string;
-  embedded?: boolean;
-}
-
-function getUrlParams(): UrlParams {
-  const url = new URL(window.location.href);
-  const searchParams = new URLSearchParams(url.search);
-
-  const list = searchParams.get('list')?.split(',');
-  const mute = searchParams.get('mute') === 'true';
-  const title = searchParams.get('title') || undefined;
-  const embedded = searchParams.get('embedded') === 'true';
-
-  return {list, mute, title, embedded};
-}
+import { getUrlParams, setUrlParam } from '@js/utils';
 
 // Initialize slot machine
 (() => {
@@ -30,9 +12,11 @@ function getUrlParams(): UrlParams {
   const settingsContent = document.getElementById('settings-panel') as HTMLDivElement | null;
   const settingsSaveButton = document.getElementById('settings-save') as HTMLButtonElement | null;
   const settingsCloseButton = document.getElementById('settings-close') as HTMLButtonElement | null;
+  const getEmbedUrlButton = document.getElementById('embed-button') as HTMLButtonElement | null;
   const sunburstSvg = document.getElementById('sunburst') as HTMLImageElement | null;
   const confettiCanvas = document.getElementById('confetti-canvas') as HTMLCanvasElement | null;
   const nameListTextArea = document.getElementById('name-list') as HTMLTextAreaElement | null;
+  const titleInputField = document.getElementById('display-title-setting') as HTMLInputElement | null;
   const removeNameFromListCheckbox = document.getElementById('remove-from-list') as HTMLInputElement | null;
   const enableSoundCheckbox = document.getElementById('enable-sound') as HTMLInputElement | null;
   const displayTitle = document.getElementById('display-title') as HTMLHeadingElement | null;
@@ -46,6 +30,7 @@ function getUrlParams(): UrlParams {
     && settingsWrapper
     && settingsContent
     && settingsSaveButton
+    && getEmbedUrlButton
     && settingsCloseButton
     && sunburstSvg
     && confettiCanvas
@@ -125,14 +110,18 @@ function getUrlParams(): UrlParams {
   });
 
   
-  const {list, mute, title, embedded} = getUrlParams();
+  const {list, mute, title, embedded, removeWinner} = getUrlParams();
   if(list) slot.names = list;
   if(mute) soundEffects.mute = mute;
   if(title && displayTitle) {
     displayTitle.innerText = title;
     window.document.title = "Label Spinner: " + title;
+    if (titleInputField){
+      titleInputField.value = title;
+    }
   };
   if(embedded && appWrapper) appWrapper.classList.add('embedded');
+  slot.shouldRemoveWinnerFromNameList = !!removeWinner;
 
   /** To open the setting page */
   const onSettingsOpen = () => {
@@ -156,6 +145,15 @@ function getUrlParams(): UrlParams {
     }
 
     slot.spin();
+  });
+
+  getEmbedUrlButton.addEventListener('click', () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('embedded', 'true');
+    const embedUrl = url.toString();
+    navigator.clipboard.writeText(embedUrl).then(() => {
+      window.alert(`Embed URL copied to clipboard.\n\n${embedUrl} \n\nYou can now paste this URL in your website to embed this app.`);
+    });
   });
 
   // Hide fullscreen button when it is not supported
@@ -187,6 +185,15 @@ function getUrlParams(): UrlParams {
       : [];
     slot.shouldRemoveWinnerFromNameList = removeNameFromListCheckbox.checked;
     soundEffects.mute = !enableSoundCheckbox.checked;
+
+
+    setUrlParam('list', slot.names.join(','));
+    setUrlParam('mute', !enableSoundCheckbox.checked);
+    if(displayTitle){
+      displayTitle.innerText = titleInputField?.value || "";
+    }
+    setUrlParam('title', titleInputField?.value);
+    setUrlParam('removeWinner', removeNameFromListCheckbox.checked);
     onSettingsClose();
   });
 

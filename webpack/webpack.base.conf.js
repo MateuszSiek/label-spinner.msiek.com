@@ -45,10 +45,10 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../src/index.pug'),
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true
-      }
+      // minify: {
+      //   removeComments: true,
+      //   collapseWhitespace: true
+      // }
     }),
     new HtmlVariablesPlugin(process.env)
   ],
